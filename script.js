@@ -1,5 +1,6 @@
-const btnShop = document.getElementsByClassName("btnShop");
-const formContainer = document.getElementById("formContainer");
+const btnShop = document.querySelectorAll(".btnShop");
+const formContainer = document.querySelector("#formContainer");
+
 const nameInput = document.createElement("input");
 const citySelect = document.createElement("select");
 const newPostInput = document.createElement("input");
@@ -7,9 +8,9 @@ const paymentSelect = document.createElement("select");
 const quantityInput = document.createElement("input");
 const commentInput = document.createElement("textarea");
 
-for (let i = 0; i < btnShop.length; i++) {
-  btnShop[i].addEventListener("click", createForm);
-}
+btnShop.forEach((btn) => {
+  btn.addEventListener("click", createForm);
+});
 
 function createForm() {
   const orderForm = document.createElement("form");
@@ -49,6 +50,25 @@ function createForm() {
     }
   });
   formContainer.appendChild(orderForm);
+}
+
+function handleFormSubmit(event) {
+  event.preventDefault();
+  if (
+    nameInput.value.trim() === "" ||
+    citySelect.value === "" ||
+    newPostInput.value.trim() === "" ||
+    paymentSelect.value.trim() === "" ||
+    quantityInput.value.trim() === ""
+  ) {
+    const error = document.createElement("div");
+    error.innerHTML = "Заповніть ці поля.";
+    formContainer.appendChild(error);
+  } else {
+    orderForm.style.display = "none";
+    orderForm.reset();
+    showOrderTable();
+  }
 }
 
 function showOrderTable() {
