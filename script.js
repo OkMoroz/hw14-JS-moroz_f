@@ -41,7 +41,7 @@ function createForm() {
       quantityInput.value.trim() === ""
     ) {
       const error = document.createElement("div");
-      error.innerHTML = "Заповніть всі поля, будь ласка.";
+      error.innerHTML = "Заповніть це поле.";
       formContainer.appendChild(error);
     } else {
       orderForm.style.display = "none";
@@ -52,23 +52,8 @@ function createForm() {
   formContainer.appendChild(orderForm);
 }
 
-function handleFormSubmit(event) {
+function handleFormSubmit(orderForm, event) {
   event.preventDefault();
-  if (
-    nameInput.value.trim() === "" ||
-    citySelect.value === "" ||
-    newPostInput.value.trim() === "" ||
-    paymentSelect.value.trim() === "" ||
-    quantityInput.value.trim() === ""
-  ) {
-    const error = document.createElement("div");
-    error.innerHTML = "Заповніть ці поля.";
-    formContainer.appendChild(error);
-  } else {
-    orderForm.style.display = "none";
-    orderForm.reset();
-    showOrderTable();
-  }
 }
 
 function showOrderTable() {
@@ -96,8 +81,9 @@ function showOrderTable() {
 
   btnConfirmOk.addEventListener("click", () => {
     orderTable.style.display = "none";
-    orderContainer.appendChild(orderTable);
+    orderContainer.innerHTML = "";
   });
+  orderContainer.innerHTML = "";
   orderContainer.appendChild(orderTable);
 }
 
@@ -130,34 +116,19 @@ function createCityLabel(orderForm) {
   citySelect.setAttribute("name", "city");
   citySelect.required = true;
 
-  const city1 = document.createElement("option");
-  city1.setAttribute("value", "Київ");
-  city1.innerHTML = "Київ";
-  citySelect.appendChild(city1);
-  orderForm.appendChild(citySelect);
+  const cities = [
+    { value: "Київ", text: "Київ" },
+    { value: "Львів", text: "Львів" },
+    { value: "Черкаси", text: "Черкаси" },
+    { value: "Івано-Франківськ", text: "Івано-Франківськ" },
+    { value: "Одеса", text: "Одеса" },
+  ];
 
-  const city2 = document.createElement("option");
-  city2.setAttribute("value", "Львів");
-  city2.innerHTML = "Львів";
-  citySelect.appendChild(city2);
-  orderForm.appendChild(citySelect);
+  cities.forEach((city) => {
+    const option = createOption(city.value, city.text);
+    citySelect.appendChild(option);
+  });
 
-  const city3 = document.createElement("option");
-  city3.setAttribute("value", "Черкаси");
-  city3.innerHTML = "Черкаси";
-  citySelect.appendChild(city3);
-  orderForm.appendChild(citySelect);
-
-  const city4 = document.createElement("option");
-  city4.setAttribute("value", "Івано-Франківськ");
-  city4.innerHTML = "Івано-Франківськ";
-  citySelect.appendChild(city4);
-  orderForm.appendChild(citySelect);
-
-  const city5 = document.createElement("option");
-  city5.setAttribute("value", "Одеса");
-  city5.innerHTML = "Одеса";
-  citySelect.appendChild(city5);
   orderForm.appendChild(citySelect);
 }
 
@@ -182,16 +153,15 @@ function createPaymentLabel(orderForm) {
   paymentSelect.setAttribute("name", "payment");
   paymentSelect.required = true;
 
-  const payment1 = document.createElement("option");
-  payment1.setAttribute("value", "Післяплата");
-  payment1.innerHTML = "Післяплата";
-  paymentSelect.appendChild(payment1);
-  orderForm.appendChild(paymentSelect);
+  const payments = [
+    { value: "Післяплата", text: "Післяплата" },
+    { value: "Оплата банківською карткою", text: "Оплата банківською карткою" },
+  ];
+  payments.forEach((payment) => {
+    const option = createOption(payment.value, payment.text);
+    paymentSelect.appendChild(option);
+  });
 
-  const payment2 = document.createElement("option");
-  payment2.setAttribute("value", "Оплата банківською карткою");
-  payment2.innerHTML = "Оплата банківською карткою";
-  paymentSelect.appendChild(payment2);
   orderForm.appendChild(paymentSelect);
 }
 
@@ -216,4 +186,11 @@ function createCommentLabel(orderForm) {
   commentInput.style.resize = "none";
   commentInput.setAttribute("id", "commentInput");
   orderForm.appendChild(commentInput);
+}
+
+function createOption(value, text) {
+  const option = document.createElement("option");
+  option.setAttribute("value", value);
+  option.innerHTML = text;
+  return option;
 }
